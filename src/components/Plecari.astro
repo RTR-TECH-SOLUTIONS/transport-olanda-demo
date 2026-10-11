@@ -1,0 +1,76 @@
+---
+import { plecari, ruta, tarife } from '../data';
+---
+
+<section id="plecari" class="container-site apare">
+  <h2 class="titlu-sectiune">Program și tarife</h2>
+  <hr class="linie" />
+  <p>
+    Plecăm în aceleași zile în fiecare săptămână. Ora exactă de preluare o afli cu o zi înainte, când te sunăm pentru
+    confirmare.
+  </p>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-2">
+    <div class="ridicat min-w-0 rounded-(--radius-card) p-5 sm:p-6">
+      <h3 class="text-[1.3rem] font-normal">Zilele de plecare</h3>
+      <div class="mt-5">
+        <table class="tabel text-[0.875rem] sm:text-base">
+          <thead>
+            <tr>
+              <th scope="col">Ziua</th>
+              <th scope="col">Sensul</th>
+              <th scope="col">Preluare</th>
+              <th scope="col" class="hidden sm:table-cell">Sosire</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              plecari.map((p) => (
+                <tr>
+                  <td class="font-semibold text-placuta-400">{p.zi}</td>
+                  <td class="text-far-50">
+                    <span class="whitespace-nowrap">{p.sens}</span>
+                    <span class="block text-[0.85rem] text-far-500 sm:hidden">sosire {p.sosire}</span>
+                  </td>
+                  <td class="whitespace-nowrap">{p.preluare}</td>
+                  <td class="hidden sm:table-cell">{p.sosire}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ridicat min-w-0 rounded-(--radius-card) p-5 sm:p-6">
+      <h3 class="text-[1.3rem] font-normal">Prețul biletului, de persoană</h3>
+      <div class="mt-5">
+        <table class="tabel text-[0.875rem] sm:text-base">
+          <thead>
+            <tr>
+              <th scope="col">Destinația</th>
+              <th scope="col" class="text-right whitespace-nowrap">Un sens</th>
+              <th scope="col" class="text-right whitespace-nowrap">Dus-întors</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              tarife.map((t) => (
+                <tr>
+                  <td class="text-far-50">{t.zona}</td>
+                  <td class="text-right font-semibold whitespace-nowrap text-placuta-400">{t.sens} €</td>
+                  <td class="text-right whitespace-nowrap">{t.dusIntors} €</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p class="mt-5 text-[0.95rem] text-far-500">
+    Prețurile includ preluarea de la adresă și {ruta.bagajKg} kg de bagaj. Copiii sub 10 ani plătesc jumătate de bilet.
+    Plata se face la îmbarcare, în lei sau în euro.
+  </p>
+</section>

@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import exterior from '../assets/flota-exterior.jpg';
+import interior from '../assets/flota-interior.jpg';
+import bagaje from '../assets/flota-bagaje.jpg';
+import { dotari } from '../data';
+---
+
+<section id="flota" class="container-site apare">
+  <h2 class="titlu-sectiune">Microbuzele cu care călătorești</h2>
+  <hr class="linie" />
+  <p>
+    Mercedes Vito și Sprinter de 8+1 locuri, din flota noastră. Nu lucrăm cu mașini închiriate și nici cu șoferi
+    colaboratori, așa că știm în ce stare e fiecare microbuz care pleacă la drum.
+  </p>
+
+  <div class="mt-6 grid gap-4 md:grid-cols-[1.55fr_1fr]">
+    <figure class="relative">
+      <Image
+        src={exterior}
+        alt="Microbuz Mercedes Vito negru, văzut din față, cu farurile aprinse"
+        widths={[640, 1000, 1500]}
+        sizes="(min-width: 768px) 60vw, 94vw"
+        class="h-full min-h-64 w-full rounded-(--radius-card) object-cover object-[center_35%]"
+      />
+      <figcaption class="eticheta">Mercedes Vito Tourer, 8+1 locuri</figcaption>
+    </figure>
+
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-1">
+      <figure class="relative">
+        <Image
+          src={interior}
+          alt="Scaune din piele neagră în interiorul microbuzului"
+          widths={[480, 800]}
+          sizes="(min-width: 768px) 38vw, 94vw"
+          class="aspect-[16/10] w-full rounded-(--radius-card) object-cover"
+        />
+        <figcaption class="eticheta">Scaune individuale, rabatabile</figcaption>
+      </figure>
+      <figure class="relative">
+        <Image
+          src={bagaje}
+          alt="Portbagaj de microbuz încărcat cu valize și genți de voiaj"
+          widths={[480, 800]}
+          sizes="(min-width: 768px) 38vw, 94vw"
+          class="aspect-[16/10] w-full rounded-(--radius-card) object-cover"
+        />
+        <figcaption class="eticheta">Loc pentru 40 kg de bagaj de persoană</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <ul class="mt-7 grid gap-x-10 gap-y-3 px-1 sm:grid-cols-2 sm:px-4 lg:grid-cols-3">
+    {
+      dotari.map((text) => (
+        <li class="flex gap-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0 text-placuta-500" aria-hidden="true">
+            <path d="M4 12.5l5 5L20 6.5" />
+          </svg>
+          {text}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .eticheta {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 0.5rem;
+    background: rgb(9 10 8 / 0.82);
+    font-size: 0.875rem;
+    color: var(--color-far-50);
+  }
+</style>

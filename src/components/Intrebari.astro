@@ -1,0 +1,30 @@
+---
+import { intrebari } from '../data';
+---
+
+<section id="intrebari" class="container-site apare max-w-[41rem] pb-14">
+  <h2 class="text-center text-[1.3rem] font-normal">Întrebări frecvente</h2>
+
+  <div class="mt-4 space-y-4">
+    {
+      intrebari.map((item) => (
+        <details class="intrebare ridicat rounded-(--radius-banda)">
+          <summary class="cursor-pointer list-none px-6 py-3.5 text-[1.3rem] leading-snug text-far-50 transition-colors duration-200 hover:text-placuta-400">
+            {item.q}
+          </summary>
+          <p class="px-6 pb-5">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .intrebare summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .intrebare[open] summary {
+    color: var(--color-placuta-400);
+  }
+</style>

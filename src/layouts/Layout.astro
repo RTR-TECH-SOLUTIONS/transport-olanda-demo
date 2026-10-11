@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const favicon = `${import.meta.env.BASE_URL}/favicon.svg`.replace(/\/{2,}/g, '/');
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#151613" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <!-- demo cu date placeholder: nu se indexează -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a
+      href="#continut"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-placuta-500 focus:px-4 focus:py-2 focus:font-semibold focus:text-asfalt-950"
+    >
+      Sari la conținut
+    </a>
+    <slot />
+    <script>
+      // Intrarea discretă a secțiunilor marcate cu .apare
+      const tinte = document.querySelectorAll('.apare');
+      if ('IntersectionObserver' in window) {
+        const observator = new IntersectionObserver(
+          (intrari) => {
+            for (const intrare of intrari) {
+              if (!intrare.isIntersecting) continue;
+              intrare.target.classList.add('vizibil');
+              observator.unobserve(intrare.target);
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        tinte.forEach((el) => observator.observe(el));
+      } else {
+        tinte.forEach((el) => el.classList.add('vizibil'));
+      }
+    </script>
+  </body>
+</html>

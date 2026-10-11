@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Topbar from '../components/Topbar.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Avantaje from '../components/Avantaje.astro';
+import BandaTelefon from '../components/BandaTelefon.astro';
+import Flota from '../components/Flota.astro';
+import Orase from '../components/Orase.astro';
+import Plecari from '../components/Plecari.astro';
+import Rezervare from '../components/Rezervare.astro';
+import Acte from '../components/Acte.astro';
+import Recenzii from '../components/Recenzii.astro';
+import Intrebari from '../components/Intrebari.astro';
+import Footer from '../components/Footer.astro';
+import ButonWhatsapp from '../components/ButonWhatsapp.astro';
+import { firma } from '../data';
+---
+
+<Layout
+  title={`Transport persoane Argeș – Olanda, de la adresă la adresă | ${firma.nume}`}
+  description="Curse săptămânale Argeș – Olanda cu microbuze Mercedes, de la adresă la adresă. Plecare joi din Pitești, Mioveni, Curtea de Argeș și Câmpulung."
+>
+  <Topbar />
+  <Header />
+  <main id="continut">
+    <Hero />
+    <div class="despartitor"></div>
+    <Avantaje />
+    <BandaTelefon />
+    <div class="despartitor"></div>
+    <Flota />
+    <div class="despartitor"></div>
+    <Orase />
+    <div class="despartitor"></div>
+    <Plecari />
+    <div class="despartitor"></div>
+    <Rezervare />
+    <div class="despartitor"></div>
+    <Acte />
+    <div class="despartitor"></div>
+    <Recenzii />
+    <div class="despartitor"></div>
+    <Intrebari />
+  </main>
+  <Footer />
+  <ButonWhatsapp />
+</Layout>

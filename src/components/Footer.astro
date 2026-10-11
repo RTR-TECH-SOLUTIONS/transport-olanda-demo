@@ -1,0 +1,58 @@
+---
+import { firma, servicii, utile } from '../data';
+---
+
+<footer class="subsol bg-asfalt-900">
+  <div class="container-site grid gap-10 px-4 pt-10 pb-8 md:grid-cols-3">
+    <div class="space-y-2.5">
+      <h2 class="text-[1.08rem] font-semibold">{firma.denumireLegala}</h2>
+      <p>CUI {firma.cui}</p>
+      <p>Nr. R.C. {firma.regCom}</p>
+      <p>{firma.adresa}</p>
+      <h2 class="pt-1 text-[1.08rem] font-normal">Adresa</h2>
+      <p>{firma.adresa}, cod poștal {firma.codPostal}</p>
+      <h2 class="pt-1 text-[1.08rem] font-normal">Program cu publicul</h2>
+      <p>{firma.program}</p>
+    </div>
+
+    <div>
+      <p>Utile</p>
+      <ul class="lista-buline mt-3 space-y-2">
+        {
+          utile.map((text) => (
+            <li>
+              <a href="#top" class="hover:text-placuta-400">{text}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <ul class="lista-buline space-y-2">
+      {
+        servicii.map((grup) => (
+          <li>
+            {grup.titlu}
+            <ul class="lista-cercuri mt-2 space-y-2">
+              {grup.rute.map((ruta) => (
+                <li>
+                  <a href="#top" class="hover:text-placuta-400">{ruta}</a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container-site border-t border-asfalt-700 px-4 py-7">
+    <p>© {new Date().getFullYear()} {firma.nume}. Toate drepturile rezervate.</p>
+  </div>
+</footer>
+
+<style>
+  .subsol {
+    box-shadow: 0 -2px 10px rgb(0 0 0 / 0.45);
+  }
+</style>

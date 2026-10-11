@@ -1,0 +1,30 @@
+---
+// Banda subțire de deasupra antetului: următoarea plecare, calculată în browser.
+import { firma, whatsappLink } from '../data';
+---
+
+<div class="bg-noapte text-[0.875rem] text-far-300">
+  <div class="container-site flex min-h-9 flex-wrap items-center justify-between gap-x-6 py-1.5">
+    <p>
+      Următoarea plecare din Argeș: <strong class="font-semibold text-placuta-400" data-urmatoarea-plecare>joi</strong>
+      <span class="hidden text-far-500 sm:inline"> · retur din Olanda sâmbăta și duminica</span>
+    </p>
+    <p class="hidden md:block">
+      <a href={whatsappLink()} target="_blank" rel="noopener" class="hover:text-placuta-400">WhatsApp</a>
+      <span class="text-far-500"> · </span>
+      <a href={`mailto:${firma.email}`} class="hover:text-placuta-400">{firma.email}</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Plecarea e joia. Dacă azi e joi după ora 10, afișăm joia următoare.
+  const loc = document.querySelector<HTMLElement>('[data-urmatoarea-plecare]');
+  if (loc) {
+    const acum = new Date();
+    let zile = (4 - acum.getDay() + 7) % 7;
+    if (zile === 0 && acum.getHours() >= 10) zile = 7;
+    const plecare = new Date(acum.getFullYear(), acum.getMonth(), acum.getDate() + zile);
+    loc.textContent = plecare.toLocaleDateString('ro-RO', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+</script>
