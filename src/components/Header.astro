@@ -1,0 +1,88 @@
+---
+import Logo from './Logo.astro';
+import { firma, meniu } from '../data';
+---
+
+<header class="antet sticky top-0 z-40 border-t-4 border-placuta-500 bg-asfalt-900">
+  <div class="container-site flex h-(--header-h) items-center justify-between gap-3">
+    <Logo />
+
+    <nav aria-label="Meniu principal" class="hidden lg:block">
+      <ul class="flex items-center text-[1.05rem] font-medium text-far-50">
+        {
+          meniu.map((link) => (
+            <li class="border-l border-asfalt-700 first:border-0">
+              <a href={link.href} class="block px-7 py-2.5 transition-colors duration-200 hover:text-placuta-400">
+                {link.text}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-2.5">
+      <a
+        href={firma.telefonLink}
+        class="rounded-[3px] bg-placuta-500 px-2 py-1.5 text-[0.875rem] font-medium sm:text-base whitespace-nowrap text-asfalt-950 transition-colors duration-200 hover:bg-placuta-400 sm:px-4"
+      >
+        {firma.telefon}
+      </a>
+      <button
+        type="button"
+        class="rounded-[3px] border border-asfalt-600 px-2 py-1.5 text-[0.875rem] font-semibold whitespace-nowrap text-far-50 uppercase sm:text-base lg:hidden"
+        aria-expanded="false"
+        aria-controls="meniu-mobil"
+        data-meniu-buton
+      >
+        <span aria-hidden="true">≡</span> Meniu
+      </button>
+    </div>
+  </div>
+
+  <nav id="meniu-mobil" aria-label="Meniu mobil" class="border-t border-asfalt-700 bg-asfalt-900 lg:hidden" hidden>
+    <ul class="container-site py-1">
+      {
+        meniu.map((link) => (
+          <li class="border-b border-asfalt-700 last:border-0">
+            <a href={link.href} class="block py-3.5 text-lg font-medium text-far-50">
+              {link.text}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .antet {
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.55);
+  }
+</style>
+
+<script>
+  const buton = document.querySelector<HTMLButtonElement>('[data-meniu-buton]');
+  const meniu = document.getElementById('meniu-mobil');
+
+  if (buton && meniu) {
+    const inchide = () => {
+      meniu.hidden = true;
+      buton.setAttribute('aria-expanded', 'false');
+    };
+
+    buton.addEventListener('click', () => {
+      const deschis = buton.getAttribute('aria-expanded') === 'true';
+      meniu.hidden = deschis;
+      buton.setAttribute('aria-expanded', String(!deschis));
+    });
+
+    meniu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) inchide();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') inchide();
+    });
+  }
+</script>

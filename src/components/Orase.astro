@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import fotoOlanda from '../assets/orase-olanda.jpg';
+import fotoArges from '../assets/orase-arges.jpg';
+import { oraseArges, oraseOlanda, ruta } from '../data';
+
+const coloane = [
+  {
+    titlu: 'Olanda',
+    eticheta: 'Unde te lăsăm',
+    foto: fotoOlanda,
+    alt: 'Canal din Amsterdam la lăsarea serii, cu case înalte din cărămidă',
+    text: 'Facem curse regulate către cele mai importante orașe din Olanda și te lăsăm direct la adresă.',
+    orase: oraseOlanda,
+    nota: 'Ajungem și în multe alte localități din toate cele 12 provincii ale Olandei.',
+  },
+  {
+    titlu: 'Argeș',
+    eticheta: 'De unde te luăm',
+    foto: fotoArges,
+    alt: 'Transfăgărășanul văzut de sus, cu serpentinele spre Bâlea',
+    text: 'Preluăm pasageri de la adresă din tot județul și din localitățile vecine din Vâlcea și Olt.',
+    orase: oraseArges,
+    nota: 'Nu îți găsești localitatea în listă? Sună-ne. Ajungem și în comune și sate, dacă ne spui adresa la rezervare.',
+  },
+];
+---
+
+<section id="orase" class="container-site apare">
+  <h2 class="titlu-sectiune">Orașe deservite</h2>
+  <hr class="linie" />
+  <p>
+    Drumul are cam {ruta.km} km și durează în jur de {ruta.ore} de ore, cu pauze. Mai jos sunt localitățile în care
+    ajungem cel mai des.
+  </p>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    {
+      coloane.map((col) => (
+        <article class="ridicat overflow-hidden rounded-(--radius-card)">
+          <div class="relative">
+            <Image
+              src={col.foto}
+              alt={col.alt}
+              widths={[480, 800, 1300]}
+              sizes="(min-width: 768px) 38rem, 94vw"
+              class="aspect-[16/7] w-full object-cover"
+            />
+            <div class="voal absolute inset-0"></div>
+            <div class="absolute inset-x-5 bottom-4 sm:inset-x-6">
+              <p class="text-[0.9rem] text-far-300">{col.eticheta}</p>
+              <h3 class="text-[1.75rem] leading-tight font-semibold text-white">{col.titlu}</h3>
+            </div>
+          </div>
+
+          <div class="p-5 sm:p-6">
+            <p>{col.text}</p>
+            <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 text-far-50 sm:grid-cols-3">
+              {
+                col.orase.map((oras) => (
+                  <li class="oras">{oras}</li>
+                ))
+              }
+            </ul>
+            <p class="mt-5 border-t border-asfalt-700 pt-4 text-[0.95rem] text-far-500">{col.nota}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* voal doar în partea de jos a pozei, cât să se citească titlul */
+  .voal {
+    background: linear-gradient(to top, rgb(9 10 8 / 0.88) 0%, rgb(9 10 8 / 0.35) 45%, rgb(9 10 8 / 0) 75%);
+  }
+
+  .oras {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+
+  .oras::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--color-placuta-500);
+  }
+</style>

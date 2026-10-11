@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/inter/wght-italic.css";
+@import "@fontsource/barlow-condensed/latin-700.css";
+@import "@fontsource/barlow-condensed/latin-ext-700.css";
+
+/* ------------------------------------------------------------------ */
+/* Tokens                                                              */
+/* ------------------------------------------------------------------ */
+@theme {
+  --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* asfalt - fundalul site-ului */
+  --color-asfalt-950: #151613;
+  --color-asfalt-900: #1b1c19;
+  --color-asfalt-800: #20221e;
+  --color-asfalt-700: #2b2d28;
+  --color-asfalt-600: #45483f;
+  --color-noapte: #090a08;
+
+  /* text */
+  --color-far-50: #e9e8e1;
+  --color-far-300: #bdbcb2;
+  --color-far-500: #8f8e83;
+
+  /* galben de placuta - singurul accent */
+  --color-placuta-400: #ffd53d;
+  --color-placuta-500: #f5c518;
+  --color-placuta-600: #d6a900;
+
+  --radius-card: 1rem;
+  --radius-banda: 1.5rem;
+
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+:root {
+  --header-h: 4.25rem;
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------ */
+/* Baza                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-far-300);
+    background: var(--color-asfalt-950);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-far-50);
+    line-height: 1.2;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-placuta-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-placuta-500);
+    color: var(--color-asfalt-950);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Componente                                                          */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .container-site {
+    width: min(100% - 2rem, 79rem);
+    margin-inline: auto;
+  }
+
+  /* titlul de sectiune: majuscule, subtire, cu linie dedesubt */
+  .titlu-sectiune {
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .linie {
+    margin-block: 1.1rem 1.25rem;
+    border: 0;
+    border-top: 1px solid var(--color-asfalt-700);
+  }
+
+  /* linia verticala scurta dintre sectiuni */
+  .despartitor {
+    width: 1px;
+    height: 4rem;
+    margin: 1.25rem auto 1.75rem;
+    background: var(--color-asfalt-600);
+  }
+
+  /* benzile cu pret si telefon: galben care curge spre chihlimbar */
+  .banda-galbena {
+    background: linear-gradient(90deg, var(--color-placuta-400) 0%, var(--color-placuta-500) 45%, #eda512 100%);
+    color: #17140a;
+  }
+
+  /* suprafata ridicata (carduri, intrebari): fara contur, doar umbra moale */
+  .ridicat {
+    background: var(--color-asfalt-800);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 14px 34px -14px rgb(0 0 0 / 0.75);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.7rem 1.35rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      background-color 180ms var(--ease-out-soft),
+      border-color 180ms var(--ease-out-soft),
+      color 180ms var(--ease-out-soft);
+  }
+
+  .btn-galben {
+    background: var(--color-placuta-500);
+    color: #17140a;
+  }
+  .btn-galben:hover {
+    background: var(--color-placuta-400);
+  }
+
+  .camp {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--color-asfalt-600);
+    border-radius: 0.75rem;
+    background: var(--color-asfalt-950);
+    color: var(--color-far-50);
+    transition: border-color 180ms var(--ease-out-soft);
+  }
+  .camp:hover {
+    border-color: var(--color-far-500);
+  }
+  .camp::placeholder {
+    color: var(--color-far-500);
+  }
+
+  /* tabelele de program si tarife */
+  .tabel {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .tabel th {
+    padding: 0 0.75rem 0.6rem 0;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-far-500);
+  }
+  .tabel td {
+    padding: 0.8rem 0.75rem 0.8rem 0;
+    border-top: 1px solid var(--color-asfalt-700);
+    vertical-align: top;
+  }
+  @media (max-width: 639px) {
+    .tabel th,
+    .tabel td {
+      padding-right: 0.4rem;
+    }
+  }
+  .tabel th:last-child,
+  .tabel td:last-child {
+    padding-right: 0;
+  }
+
+  /* intrarea discreta a sectiunilor la scroll (doar cu JS activ) */
+  html.js .apare {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 500ms var(--ease-out-soft),
+      transform 500ms var(--ease-out-soft);
+  }
+  html.js .apare.vizibil {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lista-buline {
+    padding-left: 2.5rem;
+    list-style: disc;
+  }
+
+  .lista-cercuri {
+    padding-left: 2.5rem;
+    list-style: circle;
+  }
+}

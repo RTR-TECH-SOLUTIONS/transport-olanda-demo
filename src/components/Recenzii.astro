@@ -1,0 +1,53 @@
+---
+import Stele from './Stele.astro';
+import { recenzii, recenziiSumar } from '../data';
+---
+
+<section id="recenzii" class="container-site apare">
+  <h2 class="titlu-sectiune">Ce spun cei care au călătorit cu noi</h2>
+  <hr class="linie" />
+
+  <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <Stele />
+    <span>
+      <strong class="font-semibold text-far-50">{recenziiSumar.nota} din 5</strong> pe {recenziiSumar.sursa}, din
+      {recenziiSumar.total} recenzii
+    </span>
+  </p>
+
+  <div class="mt-7 grid gap-8 md:grid-cols-3 md:gap-0">
+    {
+      recenzii.map((r) => (
+        <figure class="recenzie md:px-8">
+          <blockquote class="text-[1.05rem] leading-relaxed text-far-50">„{r.text}”</blockquote>
+          <figcaption class="mt-4">
+            <span class="block font-semibold text-far-50">{r.nume}</span>
+            <span class="text-[0.95rem] text-far-500">{r.detaliu}</span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .recenzie {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-asfalt-700);
+  }
+
+  @media (min-width: 768px) {
+    .recenzie {
+      padding-top: 0;
+      border-top: 0;
+      border-left: 1px solid var(--color-asfalt-700);
+    }
+    .recenzie:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .recenzie:last-child {
+      padding-right: 0;
+    }
+  }
+</style>

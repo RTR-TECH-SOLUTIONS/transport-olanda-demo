@@ -1,0 +1,16 @@
+---
+// Logo placeholder: numele firmei scris ca pe o plăcuță de înmatriculare.
+// TODO(real): înlocuiește cu logo-ul clientului.
+import { firma } from '../data';
+
+const [primul, ...rest] = firma.nume.split(' ');
+---
+
+<a href="#top" class="inline-flex shrink-0 items-center gap-1.5 sm:gap-2" aria-label={`${firma.nume}, începutul paginii`}>
+  <span class="rounded-[4px] bg-placuta-500 px-1.5 py-[3px] font-display text-[1.15rem] leading-none font-bold tracking-wide text-asfalt-950 uppercase sm:text-[1.6rem]">
+    {primul}
+  </span>
+  <span class="font-display text-[1.15rem] leading-none font-bold tracking-wide text-far-50 uppercase sm:text-[1.6rem]">
+    {rest.join(' ')}
+  </span>
+</a>
