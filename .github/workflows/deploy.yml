@@ -1,17 +1,20 @@
-name: Deploy pe GitHub Pages
+name: Publică site-ul
 
+# Un push pe main construiește site-ul de două ori: varianta de producție ajunge
+# în branch-ul `productie`, de unde Hostinger o ia singur prin Git, iar demo-ul
+# rămâne pe GitHub Pages.
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 concurrency:
-  group: pages
+  group: publicare
   cancel-in-progress: true
 
 jobs:
@@ -24,12 +27,32 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+
+      - name: Construiește varianta de producție
+        run: npm run build
+
+      - name: Publică în branch-ul productie
+        run: |
+          set -e
+          cd dist
+          git init -q -b productie
+          git config user.name "RTR Solutions (automat)"
+          git config user.email "contact@rtrsolutions.ro"
+          git add -A
+          git commit -q -m "Site construit din $GITHUB_SHA"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" productie
+          rm -rf .git
+
+      - name: Construiește demo-ul pentru GitHub Pages
+        run: npm run build
+        env:
+          DEMO: 1
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
-  deploy:
+  demo:
     needs: build
     runs-on: ubuntu-latest
     environment:
