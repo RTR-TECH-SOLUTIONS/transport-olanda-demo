@@ -1,53 +1,50 @@
 ---
-import { firma, servicii, utile } from '../data';
+import { caleRuta, firma, tari, whatsappLink } from '../data';
+import { url } from '../lib/url';
 ---
 
 <footer class="subsol bg-asfalt-900">
   <div class="container-site grid gap-10 px-4 pt-10 pb-8 md:grid-cols-3">
     <div class="space-y-2.5">
-      <h2 class="text-[1.08rem] font-semibold">{firma.denumireLegala}</h2>
-      <p>CUI {firma.cui}</p>
-      <p>Nr. R.C. {firma.regCom}</p>
-      <p>{firma.adresa}</p>
-      <h2 class="pt-1 text-[1.08rem] font-normal">Adresa</h2>
-      <p>{firma.adresa}, cod poștal {firma.codPostal}</p>
-      <h2 class="pt-1 text-[1.08rem] font-normal">Program cu publicul</h2>
-      <p>{firma.program}</p>
+      <h2 class="text-[1.08rem] font-semibold">{firma.nume}</h2>
+      <p>Transport persoane și colete între România și {tari.map((t) => t.nume).join(', ')}.</p>
+      <h2 class="pt-1 text-[1.08rem] font-normal">Telefon</h2>
+      <p><a href={firma.telefonLink} class="hover:text-placuta-400">{firma.telefon}</a></p>
+      <p><a href={whatsappLink()} target="_blank" rel="noopener" class="hover:text-placuta-400">Scrie-ne pe WhatsApp</a></p>
     </div>
 
     <div>
-      <p>Utile</p>
+      <h2 class="text-[1.08rem] font-normal">Transport persoane</h2>
       <ul class="lista-buline mt-3 space-y-2">
         {
-          utile.map((text) => (
+          tari.map((t) => (
             <li>
-              <a href="#top" class="hover:text-placuta-400">{text}</a>
+              <a href={url(caleRuta('persoane', t.slug))} class="hover:text-placuta-400">Transport persoane România – {t.nume}</a>
             </li>
           ))
         }
       </ul>
     </div>
 
-    <ul class="lista-buline space-y-2">
-      {
-        servicii.map((grup) => (
-          <li>
-            {grup.titlu}
-            <ul class="lista-cercuri mt-2 space-y-2">
-              {grup.rute.map((ruta) => (
-                <li>
-                  <a href="#top" class="hover:text-placuta-400">{ruta}</a>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))
-      }
-    </ul>
+    <div>
+      <h2 class="text-[1.08rem] font-normal">Transport colete</h2>
+      <ul class="lista-buline mt-3 space-y-2">
+        {
+          tari.map((t) => (
+            <li>
+              <a href={url(caleRuta('colete', t.slug))} class="hover:text-placuta-400">Transport colete România – {t.nume}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 
-  <div class="container-site border-t border-asfalt-700 px-4 py-7">
+  <div class="container-site flex flex-wrap justify-between gap-x-8 gap-y-2 border-t border-asfalt-700 px-4 py-7">
     <p>© {new Date().getFullYear()} {firma.nume}. Toate drepturile rezervate.</p>
+    <p>
+      Site realizat de <a href="https://rtrsolutions.ro" target="_blank" rel="noopener" class="text-far-50 hover:text-placuta-400">RTR Solutions</a>
+    </p>
   </div>
 </footer>
 

@@ -1,22 +1,48 @@
 ---
-import { intrebari } from '../data';
+import { url } from '../lib/url';
+
+interface Props {
+  lista: { q: string; a: string; link?: { href: string; text: string } }[];
+}
+
+const { lista } = Astro.props;
+
+// aceleași întrebări, în formatul pe care îl citește Google
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: lista.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
 ---
 
-<section id="intrebari" class="container-site apare max-w-[41rem] pb-14">
+<section id="intrebari" class="container-site apare max-w-[41rem]">
   <h2 class="text-center text-[1.3rem] font-normal">Întrebări frecvente</h2>
 
   <div class="mt-4 space-y-4">
     {
-      intrebari.map((item) => (
+      lista.map((item) => (
         <details class="intrebare ridicat rounded-(--radius-banda)">
           <summary class="cursor-pointer list-none px-6 py-3.5 text-[1.3rem] leading-snug text-far-50 transition-colors duration-200 hover:text-placuta-400">
             {item.q}
           </summary>
-          <p class="px-6 pb-5">{item.a}</p>
+          <p class="px-6 pb-5">
+            {item.a}
+            {item.link && (
+              <a href={url(item.link.href)} class="mt-2 block font-medium text-far-50 underline decoration-placuta-500 decoration-2 underline-offset-4 hover:text-placuta-400">
+                {item.link.text}
+              </a>
+            )}
+          </p>
         </details>
       ))
     }
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 </section>
 
 <style>

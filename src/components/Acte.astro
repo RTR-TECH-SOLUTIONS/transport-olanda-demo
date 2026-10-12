@@ -1,13 +1,19 @@
 ---
 import { acte, firma } from '../data';
+
+interface Props {
+  tara: string;
+}
+
+const { tara } = Astro.props;
 ---
 
 <section id="acte" class="container-site apare">
   <h2 class="titlu-sectiune">Acte necesare pentru călătorie</h2>
   <hr class="linie" />
   <p>
-    Pentru Olanda ajunge un document de identitate valabil. Dacă pleci cu un minor, mai pot fi necesare câteva
-    documente, în funcție de cine îl însoțește.
+    Pentru {tara} ajunge un document de identitate valabil. Dacă pleci cu un minor, mai sunt necesare câteva documente,
+    în funcție de cine îl însoțește.
   </p>
 
   <div class="mt-3 grid gap-6 md:grid-cols-[1fr_2fr]">

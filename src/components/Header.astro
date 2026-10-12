@@ -1,6 +1,27 @@
 ---
 import Logo from './Logo.astro';
-import { firma, meniu } from '../data';
+import { caleRuta, firma, tari, type Serviciu } from '../data';
+import { url } from '../lib/url';
+
+interface Props {
+  serviciu?: Serviciu;
+  // slug-ul țării, pe paginile de rută
+  tara?: string;
+}
+
+const { serviciu = 'persoane', tara } = Astro.props;
+const celalalt: Serviciu = serviciu === 'persoane' ? 'colete' : 'persoane';
+
+// Țările duc la paginile serviciului curent; ultimul link schimbă serviciul.
+const meniu = [
+  ...tari.map((t) => ({ href: url(caleRuta(serviciu, t.slug)), text: t.nume, activ: t.slug === tara })),
+  {
+    href: tara ? url(caleRuta(celalalt, tara)) : `${url('/')}#destinatii`,
+    text: celalalt === 'colete' ? 'Colete' : 'Persoane',
+    activ: false,
+  },
+  { href: '#rezervare', text: serviciu === 'colete' ? 'Trimite un colet' : 'Rezervare', activ: false },
+];
 ---
 
 <header class="antet sticky top-0 z-40 border-t-4 border-placuta-500 bg-asfalt-900">
@@ -12,7 +33,11 @@ import { firma, meniu } from '../data';
         {
           meniu.map((link) => (
             <li class="border-l border-asfalt-700 first:border-0">
-              <a href={link.href} class="block px-7 py-2.5 transition-colors duration-200 hover:text-placuta-400">
+              <a
+                href={link.href}
+                aria-current={link.activ ? 'page' : undefined}
+                class:list={['block px-4 py-2.5 whitespace-nowrap transition-colors duration-200 hover:text-placuta-400 xl:px-6', link.activ && 'text-placuta-400']}
+              >
                 {link.text}
               </a>
             </li>
@@ -45,7 +70,7 @@ import { firma, meniu } from '../data';
       {
         meniu.map((link) => (
           <li class="border-b border-asfalt-700 last:border-0">
-            <a href={link.href} class="block py-3.5 text-lg font-medium text-far-50">
+            <a href={link.href} aria-current={link.activ ? 'page' : undefined} class:list={['block py-3.5 text-lg font-medium', link.activ ? 'text-placuta-400' : 'text-far-50']}>
               {link.text}
             </a>
           </li>

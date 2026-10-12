@@ -1,0 +1,57 @@
+---
+// Cele patru țări, fiecare cu linkuri spre pagina de persoane și cea de colete.
+import { Image } from 'astro:assets';
+import { caleRuta, tari } from '../data';
+import { fotoTara } from '../lib/foto';
+import { url } from '../lib/url';
+---
+
+<section id="destinatii" class="container-site apare">
+  <h2 class="titlu-sectiune">Țările în care ajungem</h2>
+  <hr class="linie" />
+  <p>
+    Facem curse între România și patru țări, în ambele sensuri. Alege țara ca să vezi orașele în care ajungem și cum
+    rezervi.
+  </p>
+
+  <div class="mt-6 grid gap-6 sm:grid-cols-2">
+    {
+      tari.map((tara) => (
+        <article class="ridicat overflow-hidden rounded-(--radius-card)">
+          <div class="relative">
+            <Image
+              src={fotoTara[tara.slug].src}
+              alt={fotoTara[tara.slug].alt}
+              widths={[480, 800, 1300]}
+              sizes="(min-width: 640px) 38rem, 94vw"
+              class="aspect-[16/8] w-full object-cover"
+            />
+            <div class="voal absolute inset-0"></div>
+            <div class="absolute inset-x-5 bottom-4 sm:inset-x-6">
+              <p class="text-[0.9rem] text-far-300">România –</p>
+              <h3 class="text-[1.75rem] leading-tight font-semibold text-white">{tara.nume}</h3>
+            </div>
+          </div>
+
+          <div class="p-5 sm:p-6">
+            <p>{tara.orase.slice(0, 6).join(', ')} și orice altă localitate.</p>
+            <ul class="mt-4 flex flex-wrap gap-3">
+              <li>
+                <a href={url(caleRuta('persoane', tara.slug))} class="btn btn-galben">Transport persoane {tara.nume}</a>
+              </li>
+              <li>
+                <a href={url(caleRuta('colete', tara.slug))} class="btn btn-contur">Transport colete {tara.nume}</a>
+              </li>
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .voal {
+    background: linear-gradient(to top, rgb(9 10 8 / 0.88) 0%, rgb(9 10 8 / 0.35) 45%, rgb(9 10 8 / 0) 75%);
+  }
+</style>

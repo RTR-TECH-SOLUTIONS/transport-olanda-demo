@@ -3,45 +3,54 @@ import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import Destinatii from '../components/Destinatii.astro';
 import Avantaje from '../components/Avantaje.astro';
 import BandaTelefon from '../components/BandaTelefon.astro';
-import Flota from '../components/Flota.astro';
-import Orase from '../components/Orase.astro';
-import Plecari from '../components/Plecari.astro';
 import Rezervare from '../components/Rezervare.astro';
-import Acte from '../components/Acte.astro';
-import Recenzii from '../components/Recenzii.astro';
 import Intrebari from '../components/Intrebari.astro';
 import Footer from '../components/Footer.astro';
 import ButonWhatsapp from '../components/ButonWhatsapp.astro';
-import { firma } from '../data';
+import drum from '../assets/hero-drum.jpg';
+import { avantajePersoane, firma, intrebariAcasa, listaTari } from '../data';
+
+// pe prima pagină, avantajele vorbesc despre toate țările, nu despre una
+const avantaje = avantajePersoane('străinătate').map((a) =>
+  a.titlu === 'Tur și retur'
+    ? { ...a, text: 'Facem drumul în ambele sensuri, din România și spre România. Poți rezerva doar dusul sau și întoarcerea.' }
+    : a,
+);
 ---
 
 <Layout
-  title={`Transport persoane Argeș – Olanda, de la adresă la adresă | ${firma.nume}`}
-  description="Curse săptămânale Argeș – Olanda cu microbuze Mercedes, de la adresă la adresă. Plecare joi din Pitești, Mioveni, Curtea de Argeș și Câmpulung."
+  title={`Transport persoane și colete ${listaTari} | ${firma.nume}`}
+  description={`Transport persoane și colete între România și ${listaTari}, de la adresă la adresă, din toată țara. Prețul și data plecării le afli la telefon: ${firma.telefon}.`}
 >
   <Topbar />
   <Header />
   <main id="continut">
-    <Hero />
+    <Hero
+      foto={drum}
+      firimituri={[{ text: firma.nume }, { text: 'Transport persoane și colete' }]}
+      titlu="Transport persoane"
+      accent="și colete"
+      text={`Curse între România și ${listaTari.replace(/, ([^,]+)$/, ' și $1')}, în ambele sensuri. Te luăm de la adresă, din orice localitate din țară, și te lăsăm la adresa la care ajungi.`}
+      banda="Prețul și data următoarei plecări"
+      mesaj="Bună ziua, aș vrea detalii despre transport."
+    />
     <div class="despartitor"></div>
-    <Avantaje />
-    <BandaTelefon />
+    <Destinatii />
     <div class="despartitor"></div>
-    <Flota />
-    <div class="despartitor"></div>
-    <Orase />
-    <div class="despartitor"></div>
-    <Plecari />
+    <Avantaje
+      titlu="De ce să călătorești cu noi"
+      intro="Fie că pleci la muncă, te întorci acasă sau ai un colet de trimis, stabilim totul la telefon, fără drumuri în plus."
+      lista={avantaje}
+    />
+    <BandaTelefon text="Vrei să rezervi un loc sau să trimiți un colet? Sună-ne și îți spunem prețul." />
     <div class="despartitor"></div>
     <Rezervare />
     <div class="despartitor"></div>
-    <Acte />
-    <div class="despartitor"></div>
-    <Recenzii />
-    <div class="despartitor"></div>
-    <Intrebari />
+    <Intrebari lista={intrebariAcasa} />
+    <div class="pb-14"></div>
   </main>
   <Footer />
   <ButonWhatsapp />

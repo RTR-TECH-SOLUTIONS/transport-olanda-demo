@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Topbar from '../components/Topbar.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Avantaje from '../components/Avantaje.astro';
+import BandaTelefon from '../components/BandaTelefon.astro';
+import Orase from '../components/Orase.astro';
+import Rezervare from '../components/Rezervare.astro';
+import Acte from '../components/Acte.astro';
+import Intrebari from '../components/Intrebari.astro';
+import AlteRute from '../components/AlteRute.astro';
+import Footer from '../components/Footer.astro';
+import ButonWhatsapp from '../components/ButonWhatsapp.astro';
+import { avantajePersoane, firma, intrebariPersoane, tari, type Tara } from '../data';
+import { fotoTara } from '../lib/foto';
+import { url } from '../lib/url';
+
+export function getStaticPaths() {
+  return tari.map((tara) => ({ params: { tara: tara.slug }, props: { tara } }));
+}
+
+interface Props {
+  tara: Tara;
+}
+
+const { tara } = Astro.props;
+const n = tara.nume;
+---
+
+<Layout
+  title={`Transport persoane România – ${n}, de la adresă la adresă | ${firma.nume}`}
+  description={`Transport persoane România – ${n} și ${n} – România, de la adresă la adresă, din toată țara. Prețul și data plecării le afli la telefon: ${firma.telefon}.`}
+>
+  <Topbar />
+  <Header serviciu="persoane" tara={tara.slug} />
+  <main id="continut">
+    <Hero
+      foto={fotoTara[tara.slug].src}
+      pozitie="60% 40%"
+      firimituri={[{ text: firma.nume, href: url('/') }, { text: 'Transport persoane' }, { text: `România – ${n}` }]}
+      titlu="Transport persoane"
+      accent={`România – ${n}`}
+      text={`Cauți transport de persoane spre ${n}? Te luăm de la adresa din România și te lăsăm la adresa din ${n}. Facem și drumul de întoarcere, ${n} – România.`}
+      banda="Prețul și data următoarei plecări"
+      mesaj={`Bună ziua, aș vrea un loc la transport persoane România – ${n}.`}
+    />
+    <div class="despartitor"></div>
+    <Avantaje
+      titlu={`De ce să mergi cu noi în ${n}`}
+      intro={`Dacă ai nevoie de transport în ${n}, la muncă, la familie sau înapoi acasă, stabilim totul la telefon, fără drumuri în plus.`}
+      lista={avantajePersoane(n)}
+    />
+    <BandaTelefon text={`Vrei un loc spre ${n}? Sună-ne și îți spunem prețul și dacă mai sunt locuri.`} />
+    <div class="despartitor"></div>
+    <Orase tara={tara} serviciu="persoane" />
+    <div class="despartitor"></div>
+    <Rezervare serviciu="persoane" tara={tara.slug} />
+    <div class="despartitor"></div>
+    <Acte tara={n} />
+    <div class="despartitor"></div>
+    <Intrebari lista={intrebariPersoane(n, tara.slug)} />
+    <div class="despartitor"></div>
+    <AlteRute tara={tara} serviciu="persoane" />
+  </main>
+  <Footer />
+  <ButonWhatsapp />
+</Layout>

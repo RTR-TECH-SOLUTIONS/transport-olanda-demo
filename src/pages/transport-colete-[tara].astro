@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Topbar from '../components/Topbar.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Avantaje from '../components/Avantaje.astro';
+import BandaTelefon from '../components/BandaTelefon.astro';
+import Orase from '../components/Orase.astro';
+import Rezervare from '../components/Rezervare.astro';
+import ReguliColete from '../components/ReguliColete.astro';
+import Intrebari from '../components/Intrebari.astro';
+import AlteRute from '../components/AlteRute.astro';
+import Footer from '../components/Footer.astro';
+import ButonWhatsapp from '../components/ButonWhatsapp.astro';
+import colete from '../assets/colete.jpg';
+import { avantajeColete, firma, intrebariColete, tari, type Tara } from '../data';
+import { url } from '../lib/url';
+
+export function getStaticPaths() {
+  return tari.map((tara) => ({ params: { tara: tara.slug }, props: { tara } }));
+}
+
+interface Props {
+  tara: Tara;
+}
+
+const { tara } = Astro.props;
+const n = tara.nume;
+---
+
+<Layout
+  title={`Transport colete România – ${n}, de la adresă la adresă | ${firma.nume}`}
+  description={`Transport colete, pachete și bagaje România – ${n} și ${n} – România, de la adresă la adresă, din toată țara. Prețul îl afli la telefon: ${firma.telefon}.`}
+>
+  <Topbar />
+  <Header serviciu="colete" tara={tara.slug} />
+  <main id="continut">
+    <Hero
+      foto={colete}
+      pozitie="70% 50%"
+      firimituri={[{ text: firma.nume, href: url('/') }, { text: 'Transport colete' }, { text: `România – ${n}` }]}
+      titlu="Transport colete"
+      accent={`România – ${n}`}
+      text={`Ai un colet de trimis în ${n}? Îl ridicăm de la adresa din România și îl predăm la adresa din ${n}. Aducem și colete, pachete și bagaje din ${n} în România.`}
+      banda="Prețul pentru coletul tău"
+      mesaj={`Bună ziua, am un colet de trimis pe ruta România – ${n}.`}
+    />
+    <div class="despartitor"></div>
+    <Avantaje
+      titlu={`De ce să trimiți coletul cu noi în ${n}`}
+      intro={`Dacă ai de trimis un pachet familiei din ${n} sau aștepți unul acasă, venim noi după el și îl ducem până la ușă.`}
+      lista={avantajeColete(n)}
+    />
+    <BandaTelefon text={`Cauți transport pentru un colet în ${n}? Sună-ne și îți spunem prețul.`} />
+    <div class="despartitor"></div>
+    <Orase tara={tara} serviciu="colete" />
+    <div class="despartitor"></div>
+    <Rezervare serviciu="colete" tara={tara.slug} />
+    <div class="despartitor"></div>
+    <ReguliColete />
+    <div class="despartitor"></div>
+    <Intrebari lista={intrebariColete(n, tara.slug)} />
+    <div class="despartitor"></div>
+    <AlteRute tara={tara} serviciu="colete" />
+  </main>
+  <Footer />
+  <ButonWhatsapp />
+</Layout>
