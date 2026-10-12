@@ -159,6 +159,15 @@
     background: var(--color-placuta-400);
   }
 
+  .btn-contur {
+    border: 1px solid var(--color-asfalt-600);
+    color: var(--color-far-50);
+  }
+  .btn-contur:hover {
+    border-color: var(--color-placuta-500);
+    color: var(--color-placuta-400);
+  }
+
   .camp {
     width: 100%;
     min-height: 3rem;

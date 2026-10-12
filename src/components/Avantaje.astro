@@ -1,18 +1,21 @@
 ---
-import { avantaje } from '../data';
+interface Props {
+  titlu: string;
+  intro: string;
+  lista: { titlu: string; text: string }[];
+}
+
+const { titlu, intro, lista } = Astro.props;
 ---
 
 <section id="avantaje" class="container-site apare">
-  <h2 class="titlu-sectiune">De ce să călătorești cu noi</h2>
+  <h2 class="titlu-sectiune">{titlu}</h2>
   <hr class="linie" />
-  <p>
-    Ajungem în Amsterdam, Rotterdam, Haga, Eindhoven și în multe alte orașe din Olanda. Facem același drum în fiecare
-    săptămână, așa că îți spunem de la telefon la ce să te aștepți.
-  </p>
+  <p>{intro}</p>
 
   <ul class="mt-5 grid gap-x-10 sm:grid-cols-2">
     {
-      avantaje.map((item) => (
+      lista.map((item) => (
         <li class="flex gap-6 px-1 pb-9 sm:px-4">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="mt-0.5 shrink-0 text-placuta-500" aria-hidden="true">
             <path d="M15 2.4578C14.053 2.16035 13.0452 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 10.9548 21.8396 9.94704 21.5422 9" />
@@ -21,7 +24,6 @@ import { avantaje } from '../data';
           <div class="max-w-[31rem]">
             <h3 class="text-[0.95rem] font-normal uppercase">{item.titlu}</h3>
             <p class="mt-4">{item.text}</p>
-            {item.nota && <p class="mt-2">* {item.nota}</p>}
           </div>
         </li>
       ))

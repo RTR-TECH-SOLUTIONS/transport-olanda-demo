@@ -1,121 +1,219 @@
-// Toate datele firmei sunt placeholder pentru demo.
-// TODO(real): înlocuiește cu datele clientului (nume, CUI, telefon, prețuri, zile de plecare).
+// Conținutul site-ului. Prețurile și zilele de plecare nu apar nicăieri:
+// clientul le comunică la telefon, deci paginile trimit la apel sau WhatsApp.
 
+// Devine true după ce numele și telefonul de mai jos sunt confirmate de client.
+// Cât e false, paginile au noindex și robots.txt blochează tot site-ul.
+export const INDEXARE = false;
+
+// TODO(real): confirmă numele afișat și numărul de telefon.
 export const firma = {
-  nume: 'Vidraru Trans',
-  denumireLegala: 'VIDRARU TRANS S.R.L.',
-  cui: 'RO00000000',
-  regCom: 'J03/0000/2016',
-  adresa: 'Str. Depozitelor 14, Pitești, județul Argeș',
-  codPostal: '110138',
-  program: 'Luni – Sâmbătă, 08:00 – 20:00',
-  aniExperienta: 9,
-  telefon: '0748 555 012',
-  telefonLink: 'tel:+40748555012',
-  whatsapp: '40748555012',
-  email: 'rezervari@vidrarutrans.ro',
+  nume: 'MLN Trans',
+  telefon: '0757 209 906',
+  telefonLink: 'tel:+40757209906',
+  whatsapp: '40757209906',
 };
 
-export const ruta = {
-  pretDeLa: 150,
-  bagajKg: 40,
-  taxaKgExtra: 1,
-  km: '2.200',
-  ore: '30',
-  plecareRo: 'joi',
-  returNl: ['sâmbătă', 'duminică'],
-};
-
-export const whatsappLink = (mesaj = 'Bună ziua, aș vrea un loc pe ruta Argeș – Olanda.') =>
+export const whatsappLink = (mesaj = 'Bună ziua, aș vrea detalii despre transport.') =>
   `https://wa.me/${firma.whatsapp}?text=${encodeURIComponent(mesaj)}`;
 
-export const meniu = [
-  { href: '#avantaje', text: 'Servicii' },
-  { href: '#plecari', text: 'Tarife' },
-  { href: '#rezervare', text: 'Rezervări' },
-  { href: '#acte', text: 'Ghiduri' },
-  { href: '#intrebari', text: 'Utile' },
+export type Serviciu = 'persoane' | 'colete';
+
+export interface Tara {
+  slug: string;
+  nume: string;
+  // „ajungem oriunde în …”: formularea despre acoperire, diferită de la o țară la alta
+  acoperire: string;
+  orase: string[];
+}
+
+export const tari: Tara[] = [
+  {
+    slug: 'germania',
+    nume: 'Germania',
+    acoperire: 'Ajungem în orice localitate din Germania, în toate cele 16 landuri.',
+    orase: [
+      'Berlin',
+      'München',
+      'Frankfurt',
+      'Stuttgart',
+      'Nürnberg',
+      'Köln',
+      'Düsseldorf',
+      'Dortmund',
+      'Hamburg',
+      'Hanovra',
+      'Mannheim',
+      'Augsburg',
+    ],
+  },
+  {
+    slug: 'austria',
+    nume: 'Austria',
+    acoperire: 'Ajungem în orice localitate din Austria, de la Viena până în Tirol și Vorarlberg.',
+    orase: [
+      'Viena',
+      'Graz',
+      'Linz',
+      'Salzburg',
+      'Innsbruck',
+      'Klagenfurt',
+      'Wels',
+      'Sankt Pölten',
+      'Villach',
+      'Wiener Neustadt',
+      'Steyr',
+      'Bregenz',
+    ],
+  },
+  {
+    slug: 'belgia',
+    nume: 'Belgia',
+    acoperire: 'Ajungem în orice localitate din Belgia, în Flandra, în Valonia și în Bruxelles.',
+    orase: [
+      'Bruxelles',
+      'Anvers (Antwerpen)',
+      'Gent',
+      'Liège',
+      'Charleroi',
+      'Bruges',
+      'Leuven',
+      'Namur',
+      'Mons',
+      'Hasselt',
+      'Mechelen',
+      'Genk',
+    ],
+  },
+  {
+    slug: 'olanda',
+    nume: 'Olanda',
+    acoperire: 'Ajungem în orice localitate din Olanda, în toate cele 12 provincii.',
+    orase: [
+      'Amsterdam',
+      'Rotterdam',
+      'Haga (Den Haag)',
+      'Utrecht',
+      'Eindhoven',
+      'Arnhem',
+      'Breda',
+      'Tilburg',
+      'Venlo',
+      'Nijmegen',
+      'Almere',
+      'Westland',
+    ],
+  },
 ];
 
-export const garantii = [
-  'De la adresă la adresă',
-  `${ruta.bagajKg} kg bagaj inclus`,
-  'Asigurare pentru pasageri',
-  'Microbuze Mercedes proprii',
-  `${firma.aniExperienta} ani pe ruta Olandei`,
+export const oraseRomania = [
+  'București',
+  'Pitești',
+  'Craiova',
+  'Sibiu',
+  'Brașov',
+  'Cluj-Napoca',
+  'Timișoara',
+  'Arad',
+  'Iași',
+  'Bacău',
+  'Constanța',
+  'Galați',
 ];
 
-export const avantaje = [
+export const caleRuta = (serviciu: Serviciu, slug: string) => `/transport-${serviciu}-${slug}/`;
+
+export const listaTari = tari.map((t) => t.nume).join(', ');
+
+export const garantii = ['De la adresă la adresă', 'Din toată România', 'Tur și retur', 'Persoane și colete'];
+
+export const avantajePersoane = (tara: string) => [
   {
     titlu: 'De la adresă la adresă',
-    text: 'Te luăm de la poartă, din Pitești, Mioveni, Câmpulung sau din satul tău, și te lăsăm la ușa din Olanda. Fără autogară și fără schimbat mașini pe drum.',
+    text: `Te luăm de la adresa din România și te lăsăm la adresa din ${tara}. Nu ai drum până la autogară și nu schimbi mașina pe traseu.`,
   },
   {
-    titlu: 'Plecare în fiecare joi',
-    text: 'Mașina pleacă din Argeș joia dimineața și ajunge în Olanda vineri după-amiază. Returul se face sâmbăta și duminica, deci poți pleca și numai pentru câteva zile.',
+    titlu: 'Din toată România',
+    text: 'Preluăm pasageri din orice județ, din orașe și din comune. Ne spui localitatea la telefon și îți confirmăm de unde te luăm.',
   },
   {
-    titlu: `${ruta.bagajKg} kg bagaj în preț`,
-    text: `Două valize mari și un bagaj de mână intră fără probleme. Ce trece de ${ruta.bagajKg} kg se taxează cu ${ruta.taxaKgExtra}\u00a0€ pe kilogram, sumă pe care o afli de la telefon, nu la îmbarcare.`,
-    nota: 'Pachetele pentru rude se anunță la rezervare, ca să le facem loc.',
+    titlu: 'Tur și retur',
+    text: `Facem drumul în ambele sensuri: România – ${tara} și ${tara} – România. Poți rezerva doar dusul sau și întoarcerea.`,
   },
   {
-    titlu: 'Doi șoferi pe fiecare cursă',
-    text: 'Pe drumul de 30 de ore conduc cu rândul doi șoferi cu atestat de transport persoane. Oprim la 3-4 ore, în parcări cu benzinărie și toalete.',
+    titlu: 'Prețul îl afli înainte',
+    text: 'Prețul depinde de localitatea de plecare și de adresa la care ajungi. Ți-l spunem la telefon sau pe WhatsApp, înainte să rezervi.',
   },
   {
-    titlu: 'Dus-întors, cu retur deschis',
-    text: 'Poți lua biletul de întoarcere din prima, la preț mai bun, și stabilești data returului când o știi. Ne suni cu câteva zile înainte și îți ținem locul.',
+    titlu: 'Rezervare la telefon sau pe WhatsApp',
+    text: 'Nu completezi conturi și nu plătești online. Suni sau scrii, ne dai datele călătoriei și îți ținem locul.',
   },
   {
-    titlu: 'Microbuze 8+1, nu autocar',
-    text: 'Mercedes Sprinter și Vito cu scaune rabatabile, aer condiționat pe plafon, prize USB la fiecare rând și remorcă închisă pentru bagaje.',
+    titlu: 'Iei și un colet cu tine',
+    text: 'Dacă ai de dus un pachet pentru cineva sau bagaje în plus, ne spui la rezervare, ca să le facem loc.',
   },
 ];
 
-export const oraseArges = [
-  'Pitești',
-  'Mioveni',
-  'Curtea de Argeș',
-  'Câmpulung',
-  'Costești',
-  'Topoloveni',
-  'Ștefănești',
-  'Bascov',
-  'Domnești',
-  'Rucăr',
-  'Râmnicu Vâlcea',
-  'Slatina',
+export const avantajeColete = (tara: string) => [
+  {
+    titlu: 'Ridicăm coletul de la adresă',
+    text: `Venim după colet la adresa din România și îl predăm la adresa din ${tara}. Nu îl duci tu la un depozit sau la un punct de colectare.`,
+  },
+  {
+    titlu: 'Din toată România',
+    text: 'Preluăm colete din orice județ, din orașe și din comune. Ne spui localitatea și îți confirmăm când trecem.',
+  },
+  {
+    titlu: 'În ambele sensuri',
+    text: `Ducem colete din România în ${tara} și aducem colete din ${tara} în România.`,
+  },
+  {
+    titlu: 'Prețul îl afli înainte',
+    text: 'Prețul depinde de greutatea și de mărimea coletului și de adresa la care ajunge. Ți-l spunem la telefon, înainte să ni-l dai.',
+  },
+  {
+    titlu: 'Colete, pachete și bagaje',
+    text: 'Luăm cutii, pachete pentru familie, valize și genți. Pentru obiecte voluminoase sau fragile, întreabă-ne înainte.',
+  },
+  {
+    titlu: 'Vorbești direct cu noi',
+    text: 'Stabilim totul la telefon sau pe WhatsApp: de unde îl luăm, unde îl ducem și cine îl primește.',
+  },
 ];
 
-export const oraseOlanda = [
-  'Amsterdam',
-  'Rotterdam',
-  'Haga (Den Haag)',
-  'Utrecht',
-  'Eindhoven',
-  'Arnhem',
-  'Breda',
-  'Tilburg',
-  'Venlo',
-  'Nijmegen',
-  'Almere',
-  'Westland',
-];
-
-export const pasi = [
+export const pasiPersoane = [
   {
     titlu: 'Ne suni sau ne scrii',
-    text: 'La telefon sau pe WhatsApp ne spui trei lucruri:',
-    lista: ['localitatea din care pleci', 'adresa din Olanda', 'data la care vrei să pleci'],
+    text: 'La telefon sau pe WhatsApp ne spui:',
+    lista: ['localitatea din care pleci', 'adresa la care ajungi', 'data la care vrei să pleci', 'câte persoane sunteți'],
+  },
+  {
+    titlu: 'Afli prețul și data plecării',
+    text: 'Îți spunem cât costă drumul pentru ruta ta și care este următoarea plecare cu locuri libere.',
   },
   {
     titlu: 'Îți confirmăm locul',
-    text: 'Cu o zi înainte de plecare te sunăm cu ora aproximativă de preluare, numărul șoferului și numărul de înmatriculare al mașinii.',
+    text: 'Dacă ți se potrivește, îți rezervăm locul și stabilim de unde și la ce oră te luăm.',
+  },
+];
+
+export const pasiColete = [
+  {
+    titlu: 'Ne suni sau ne scrii',
+    text: 'La telefon sau pe WhatsApp ne spui:',
+    lista: [
+      'de unde ridicăm coletul',
+      'adresa la care trebuie să ajungă',
+      'ce conține și cât cântărește, cu aproximație',
+      'numele și telefonul destinatarului',
+    ],
   },
   {
-    titlu: 'Pleci la drum',
-    text: 'Șoferul oprește la adresa ta și te ajută cu bagajele. Plata se face la îmbarcare, în lei sau în euro, și primești bilet.',
+    titlu: 'Afli prețul și data',
+    text: 'Îți spunem cât costă transportul coletului și când îl putem ridica.',
+  },
+  {
+    titlu: 'Ridicăm și predăm coletul',
+    text: 'Venim după colet la adresa stabilită și îl predăm destinatarului, la adresa pe care ne-ai dat-o.',
   },
 ];
 
@@ -128,111 +226,121 @@ export const acte = [
     titlu: 'Minori',
     lista: [
       'Pașaport sau carte de identitate proprie.',
-      'Dacă merge cu un singur părinte ori cu alt adult: declarația notarială a părintelui care lipsește și cazierul însoțitorului, conform legii.',
+      'Dacă pleacă doar cu unul dintre părinți: acordul notarial al celuilalt părinte.',
+      'Dacă pleacă cu alt adult: acordul notarial al ambilor părinți și cazierul judiciar al însoțitorului.',
     ],
   },
   {
     titlu: 'Înainte de plecare',
     lista: [
-      'Uită-te la data de expirare a actului cu o săptămână înainte, cât mai e timp de un act nou.',
-      'Ține actele în bagajul de mână, nu în remorcă: se cer la vama Nădlac.',
+      'Uită-te la data de expirare a actului din timp, cât mai poți face unul nou.',
+      'Ține actele la tine, nu în bagajul din portbagaj.',
     ],
   },
 ];
 
-export const intrebari = [
+export const reguliColete = [
   {
-    q: 'Cât costă un bilet?',
-    a: `Prețul depinde de localitatea din Olanda la care ajungi. Biletele pornesc de la ${ruta.pretDeLa}\u00a0€ de persoană, pe sens. La dus-întors și pentru copiii sub 10 ani prețul e mai mic; îl afli exact la telefon.`,
-  },
-  {
-    q: 'Veniți până la adresă și în sate?',
-    a: 'Da. Preluăm din tot județul Argeș, inclusiv din comune, și din zonele vecine din Vâlcea și Olt. În Olanda te lăsăm la adresa pe care ne-o dai, în oricare dintre cele 12 provincii.',
-  },
-  {
-    q: 'În ce zi pleacă mașina din Argeș?',
-    a: 'În fiecare joi dimineața. Preluările de la adrese se fac între 06:00 și 10:00, iar ora ta o afli miercuri, când te sunăm pentru confirmare.',
-  },
-  {
-    q: 'Când se face returul din Olanda?',
-    a: 'Sâmbăta și duminica. Ajungi în Argeș a doua zi seara.',
-  },
-  {
-    q: 'Cu ce mașini se face transportul?',
-    a: 'Cu microbuze Mercedes Sprinter și Vito de 8+1 locuri, cu aer condiționat, scaune rabatabile și remorcă închisă pentru bagaje. Toate au licență de transport internațional și asigurare pentru pasageri.',
-  },
-  {
-    q: 'Plătesc ceva în plus pentru bagaj?',
-    a: `Nu, până la ${ruta.bagajKg} kg de persoană. Peste această limită se plătește ${ruta.taxaKgExtra}\u00a0€ pe kilogram. Nu luăm la bagaje alcool și țigări peste limita legală, substanțe inflamabile sau alte bunuri interzise de lege.`,
-  },
-];
-
-// TODO(real): paginile de mai jos nu există în demo; linkurile sunt doar de formă.
-export const utile = [
-  'Condiții generale de transport persoane',
-  'Prețuri simplificate',
-  'Aria de acoperire',
-  'Întrebări generale',
-  'Politica de cookies',
-  'Politica de confidențialitate',
-  'Contact',
-];
-
-export const servicii = [
-  {
-    titlu: 'Transport internațional de persoane',
-    rute: [
-      'Transport persoane Argeș – Olanda la adresă',
-      'Transport persoane Argeș – Germania la adresă',
-      'Transport persoane Argeș – Belgia la adresă',
-      'Transport persoane Argeș – Anglia la adresă',
+    titlu: 'Ce poți trimite',
+    lista: [
+      'Colete și pachete pentru familie: haine, alimente ambalate, lucruri de casă.',
+      'Valize, genți și bagaje care nu au încăput la drum.',
+      'Obiecte mai mari, după ce stabilim la telefon dacă este loc.',
     ],
   },
   {
-    titlu: 'Transport internațional de colete',
-    rute: ['Transport colete Argeș – Olanda la adresă', 'Transport colete Argeș – Germania la adresă'],
+    titlu: 'Cum îl pregătești',
+    lista: [
+      'Închide bine cutia și leag-o sau lipește-o cu bandă.',
+      'Scrie pe colet numele, adresa și telefonul destinatarului.',
+      'Spune-ne dacă este ceva fragil înăuntru.',
+    ],
+  },
+  {
+    titlu: 'Ce nu luăm',
+    lista: [
+      'Bunuri interzise de lege și substanțe inflamabile.',
+      'Alcool și țigări peste limitele legale.',
+      'Bani și obiecte de valoare.',
+    ],
   },
 ];
 
-export const dotari = [
-  'Aer condiționat și încălzire separată pentru pasageri',
-  'Scaune rabatabile, cu centură în trei puncte',
-  'Prize USB la fiecare rând',
-  'Wi-Fi pe teritoriul României',
-  'Remorcă închisă pentru bagaje',
-  'Revizie făcută înaintea fiecărei curse',
-];
-
-export const plecari = [
-  { zi: 'Joi', sens: 'Argeș → Olanda', preluare: '06:00 – 10:00', sosire: 'vineri, după-amiaza' },
-  { zi: 'Sâmbătă', sens: 'Olanda → Argeș', preluare: '08:00 – 13:00', sosire: 'duminică, seara' },
-  { zi: 'Duminică', sens: 'Olanda → Argeș', preluare: '08:00 – 13:00', sosire: 'luni, seara' },
-];
-
-export const tarife = [
-  { zona: 'Eindhoven, Tilburg, Breda, Venlo', sens: 150, dusIntors: 280 },
-  { zona: 'Utrecht, Arnhem, Nijmegen', sens: 150, dusIntors: 280 },
-  { zona: 'Amsterdam, Rotterdam, Haga, Almere', sens: 160, dusIntors: 300 },
-  { zona: 'Groningen și nordul Olandei', sens: 170, dusIntors: 320 },
-];
-
-// TODO(real): recenziile și nota sunt inventate. Se înlocuiesc cu recenzii reale de pe Google.
-export const recenziiSumar = { nota: '4,9', total: 214, sursa: 'Google' };
-
-export const recenzii = [
+export const intrebariPersoane = (tara: string, slug: string) => [
   {
-    text: 'Merg la sere în Westland de patru ani și tot cu ei plec. M-au luat din fața porții, din Mioveni, la 7 fix, și vineri pe la 4 eram la cazare.',
-    nume: 'Marian D.',
-    detaliu: 'Mioveni → Westland',
+    q: `Cât costă transportul de persoane România – ${tara}?`,
+    a: `Prețul depinde de localitatea din care pleci și de adresa din ${tara} la care ajungi. Îl afli la telefon sau pe WhatsApp, înainte să rezervi.`,
   },
   {
-    text: 'Am trimis-o pe mama singură la sora mea, la Eindhoven. Șoferul m-a sunat când au trecut vama și când a ajuns la adresă. Asta a contat cel mai mult pentru mine.',
-    nume: 'Andreea P.',
-    detaliu: 'Curtea de Argeș → Eindhoven',
+    q: `Când este următoarea plecare spre ${tara}?`,
+    a: `Sună-ne sau scrie-ne pe WhatsApp și îți spunem data următoarei plecări spre ${tara} și dacă mai sunt locuri.`,
   },
   {
-    text: 'Aveam două valize mari și un cărucior. Nu mi-au cerut nimic în plus și le-au pus ei în remorcă. Microbuz curat, opriri la timp, șoferi liniștiți.',
-    nume: 'Ionuț și Raluca M.',
-    detaliu: 'Pitești → Rotterdam',
+    q: 'Mă luați de la adresă, chiar dacă stau la sat?',
+    a: `Da. Preluăm de la adresă din orice localitate din România și te lăsăm la adresa din ${tara} pe care ne-o dai.`,
+  },
+  {
+    q: `Faceți și drumul de întoarcere, ${tara} – România?`,
+    a: `Da, facem transport de persoane în ambele sensuri. Pentru întoarcere ne suni cu câteva zile înainte, ca să îți ținem locul.`,
+  },
+  {
+    q: 'Cum rezerv un loc?',
+    a: 'La telefon sau pe WhatsApp. Ne spui de unde pleci, unde ajungi, data și câte persoane sunteți, iar noi îți confirmăm locul.',
+  },
+  {
+    q: 'Pot lua și un colet cu mine?',
+    a: `Da. Ne spui la rezervare ce ai de dus, ca să îi facem loc. Dacă ai doar un colet de trimis, fără să călătorești, vezi pagina de transport colete România – ${tara}.`,
+    link: { href: caleRuta('colete', slug), text: `Transport colete România – ${tara}` },
+  },
+];
+
+export const intrebariColete = (tara: string, slug: string) => [
+  {
+    q: `Cât costă să trimit un colet în ${tara}?`,
+    a: 'Prețul depinde de greutatea și de mărimea coletului și de adresa la care ajunge. Ni le spui la telefon sau pe WhatsApp și afli prețul pe loc.',
+  },
+  {
+    q: 'Veniți după colet la adresă?',
+    a: `Da. Ridicăm coletul de la adresa din România și îl predăm la adresa din ${tara}. La fel și în sens invers.`,
+  },
+  {
+    q: `Aduceți și colete din ${tara} în România?`,
+    a: `Da, transportăm colete în ambele sensuri: România – ${tara} și ${tara} – România.`,
+  },
+  {
+    q: 'Transportați și bagaje sau valize?',
+    a: 'Da. Luăm valize, genți și bagaje, la fel ca pe orice alt colet. Ne spui câte sunt și cât cântăresc, cu aproximație.',
+  },
+  {
+    q: 'Când pleacă următorul transport?',
+    a: `Sună-ne sau scrie-ne pe WhatsApp și îți spunem când este următorul transport de colete spre ${tara}.`,
+  },
+  {
+    q: 'Vreau să călătoresc și eu, nu doar să trimit coletul. Se poate?',
+    a: `Da, facem și transport de persoane pe aceeași rută.`,
+    link: { href: caleRuta('persoane', slug), text: `Transport persoane România – ${tara}` },
+  },
+];
+
+export const intrebariAcasa = [
+  {
+    q: 'În ce țări faceți transport?',
+    a: `Facem transport de persoane și de colete între România și ${listaTari}, în ambele sensuri.`,
+  },
+  {
+    q: 'De unde preluați din România?',
+    a: 'Din toată țara. Preluăm persoane și colete de la adresă, din orice județ, din orașe și din comune.',
+  },
+  {
+    q: 'Cât costă transportul?',
+    a: 'Prețul depinde de țară, de localitatea de plecare și de adresa la care ajungi, iar la colete și de greutate. Îl afli la telefon sau pe WhatsApp, înainte să rezervi.',
+  },
+  {
+    q: 'Când este următoarea plecare?',
+    a: 'Sună-ne sau scrie-ne pe WhatsApp și îți spunem data următoarei plecări pentru țara care te interesează.',
+  },
+  {
+    q: 'Cum rezerv un loc sau cum trimit un colet?',
+    a: 'La telefon sau pe WhatsApp. Ne spui de unde, până unde și când, iar noi îți confirmăm prețul și data.',
   },
 ];

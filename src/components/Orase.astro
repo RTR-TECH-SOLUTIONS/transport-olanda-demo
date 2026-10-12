@@ -1,27 +1,37 @@
 ---
 import { Image } from 'astro:assets';
-import fotoOlanda from '../assets/orase-olanda.jpg';
-import fotoArges from '../assets/orase-arges.jpg';
-import { oraseArges, oraseOlanda, ruta } from '../data';
+import fotoRomania from '../assets/romania.jpg';
+import { oraseRomania, type Serviciu, type Tara } from '../data';
+import { fotoTara } from '../lib/foto';
+
+interface Props {
+  tara: Tara;
+  serviciu: Serviciu;
+}
+
+const { tara, serviciu } = Astro.props;
+const colete = serviciu === 'colete';
 
 const coloane = [
   {
-    titlu: 'Olanda',
-    eticheta: 'Unde te lăsăm',
-    foto: fotoOlanda,
-    alt: 'Canal din Amsterdam la lăsarea serii, cu case înalte din cărămidă',
-    text: 'Facem curse regulate către cele mai importante orașe din Olanda și te lăsăm direct la adresă.',
-    orase: oraseOlanda,
-    nota: 'Ajungem și în multe alte localități din toate cele 12 provincii ale Olandei.',
+    titlu: tara.nume,
+    eticheta: colete ? 'Unde predăm' : 'Unde te lăsăm',
+    foto: fotoTara[tara.slug].src,
+    alt: fotoTara[tara.slug].alt,
+    text: `${tara.acoperire} Mai jos sunt câteva dintre orașele mari.`,
+    orase: tara.orase,
+    nota: 'Nu îți găsești localitatea în listă? Ajungem și acolo. Spune-ne adresa la telefon.',
   },
   {
-    titlu: 'Argeș',
-    eticheta: 'De unde te luăm',
-    foto: fotoArges,
+    titlu: 'România',
+    eticheta: colete ? 'De unde ridicăm' : 'De unde te luăm',
+    foto: fotoRomania,
     alt: 'Transfăgărășanul văzut de sus, cu serpentinele spre Bâlea',
-    text: 'Preluăm pasageri de la adresă din tot județul și din localitățile vecine din Vâlcea și Olt.',
-    orase: oraseArges,
-    nota: 'Nu îți găsești localitatea în listă? Sună-ne. Ajungem și în comune și sate, dacă ne spui adresa la rezervare.',
+    text: colete
+      ? 'Ridicăm colete de la adresă din toată țara, din orașe și din comune.'
+      : 'Preluăm pasageri de la adresă din toată țara, din orașe și din comune.',
+    orase: oraseRomania,
+    nota: 'Lista are doar câteva exemple. Preluăm din orice județ.',
   },
 ];
 ---
@@ -30,8 +40,11 @@ const coloane = [
   <h2 class="titlu-sectiune">Orașe deservite</h2>
   <hr class="linie" />
   <p>
-    Drumul are cam {ruta.km} km și durează în jur de {ruta.ore} de ore, cu pauze. Mai jos sunt localitățile în care
-    ajungem cel mai des.
+    {
+      colete
+        ? `Ducem colete între România și ${tara.nume}, în ambele sensuri, de la adresă la adresă.`
+        : `Facem transport de persoane între România și ${tara.nume}, în ambele sensuri, de la adresă la adresă.`
+    }
   </p>
 
   <div class="mt-6 grid gap-6 md:grid-cols-2">

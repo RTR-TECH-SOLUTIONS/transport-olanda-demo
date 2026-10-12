@@ -1,9 +1,19 @@
 ---
-import { firma, oraseArges, oraseOlanda, pasi } from '../data';
+import { firma, oraseRomania, pasiColete, pasiPersoane, tari, type Serviciu } from '../data';
+
+interface Props {
+  serviciu?: Serviciu;
+  // slug-ul țării preselectate în formular
+  tara?: string;
+}
+
+const { serviciu = 'persoane', tara } = Astro.props;
+const colete = serviciu === 'colete';
+const pasi = colete ? pasiColete : pasiPersoane;
 ---
 
 <section id="rezervare" class="container-site apare">
-  <h2 class="titlu-sectiune">Cum rezervi un loc</h2>
+  <h2 class="titlu-sectiune">{colete ? 'Cum trimiți un colet' : 'Cum rezervi un loc'}</h2>
 
   <ol class="mt-10 grid gap-8 px-0 md:grid-cols-3 md:px-4">
     {
@@ -25,44 +35,58 @@ import { firma, oraseArges, oraseOlanda, pasi } from '../data';
 
   <form class="ridicat mt-8 flex flex-col gap-7 rounded-(--radius-card) p-5 md:mx-4 lg:flex-row lg:gap-12 lg:p-8" data-cerere data-whatsapp={firma.whatsapp} novalidate>
     <div class="lg:max-w-[17rem]">
-      <h3 class="text-[1.3rem] font-normal">Sau cere un loc pe WhatsApp</h3>
+      <h3 class="text-[1.3rem] font-normal">Sau cere prețul pe WhatsApp</h3>
       <p class="mt-3">
-        Completezi cele patru câmpuri, iar mesajul se deschide gata scris în WhatsApp. Îți răspundem în aceeași zi.
+        Completezi câmpurile, iar mesajul se deschide gata scris în WhatsApp. Îți răspundem cu prețul și cu data
+        plecării.
       </p>
     </div>
 
     <div class="grid flex-1 gap-4 sm:grid-cols-2">
       <label class="block">
-        <span class="mb-1.5 block text-sm text-far-50">Localitatea de plecare</span>
-        <input class="camp" name="plecare" list="lista-plecare" placeholder="ex. Mioveni" autocomplete="address-level2" required />
+        <span class="mb-1.5 block text-sm text-far-50">Ce transportăm</span>
+        <select class="camp" name="serviciu">
+          <option value="persoane" selected={!colete}>Persoane</option>
+          <option value="colete" selected={colete}>Un colet sau bagaje</option>
+        </select>
+      </label>
+
+      <label class="block">
+        <span class="mb-1.5 block text-sm text-far-50">Țara</span>
+        <select class="camp" name="tara">
+          {tari.map((t) => <option value={t.nume} selected={t.slug === tara}>{t.nume}</option>)}
+        </select>
+      </label>
+
+      <label class="block">
+        <span class="mb-1.5 block text-sm text-far-50">De unde</span>
+        <input class="camp" name="plecare" list="lista-plecare" placeholder="localitatea de plecare" required />
         <datalist id="lista-plecare">
-          {oraseArges.map((oras) => <option value={oras} />)}
+          {oraseRomania.map((oras) => <option value={oras} />)}
         </datalist>
       </label>
 
       <label class="block">
-        <span class="mb-1.5 block text-sm text-far-50">Destinația din Olanda</span>
-        <input class="camp" name="destinatie" list="lista-destinatie" placeholder="ex. Eindhoven" required />
+        <span class="mb-1.5 block text-sm text-far-50">Până unde</span>
+        <input class="camp" name="destinatie" list="lista-destinatie" placeholder="localitatea la care ajunge" required />
         <datalist id="lista-destinatie">
-          {oraseOlanda.map((oras) => <option value={oras} />)}
+          {tari.flatMap((t) => t.orase).map((oras) => <option value={oras} />)}
         </datalist>
       </label>
 
       <label class="block">
-        <span class="mb-1.5 block text-sm text-far-50">Data plecării</span>
+        <span class="mb-1.5 block text-sm text-far-50">Data dorită</span>
         <input class="camp" type="date" name="data" required />
       </label>
 
       <label class="block">
-        <span class="mb-1.5 block text-sm text-far-50">Câte persoane</span>
-        <select class="camp" name="persoane">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option value={n}>{n}</option>)}
-        </select>
+        <span class="mb-1.5 block text-sm text-far-50" data-eticheta-detalii>Câte persoane</span>
+        <input class="camp" name="detalii" placeholder="ex. 2" data-camp-detalii />
       </label>
 
       <div class="sm:col-span-2">
         <p class="mb-3 hidden text-[0.95rem] font-medium text-placuta-400" role="alert" data-cerere-eroare>
-          Completează localitatea de plecare, destinația și data.
+          Completează de unde, până unde și data.
         </p>
         <button type="submit" class="btn btn-galben w-full sm:w-auto">Trimite cererea pe WhatsApp</button>
       </div>
@@ -71,7 +95,6 @@ import { firma, oraseArges, oraseOlanda, pasi } from '../data';
 </section>
 
 <script>
-  // TODO(real): pe proiectul real, cererea se poate salva și într-un CMS / trimite pe e-mail (Resend).
   const form = document.querySelector<HTMLFormElement>('[data-cerere]');
   const eroare = document.querySelector<HTMLElement>('[data-cerere-eroare]');
 
@@ -79,13 +102,26 @@ import { firma, oraseArges, oraseOlanda, pasi } from '../data';
     const data = form.elements.namedItem('data') as HTMLInputElement;
     data.min = new Date().toISOString().slice(0, 10);
 
+    // Ultimul câmp întreabă de persoane sau de greutate, după serviciul ales.
+    const serviciu = form.elements.namedItem('serviciu') as HTMLSelectElement;
+    const eticheta = form.querySelector<HTMLElement>('[data-eticheta-detalii]');
+    const detalii = form.querySelector<HTMLInputElement>('[data-camp-detalii]');
+    const potriveste = () => {
+      const colete = serviciu.value === 'colete';
+      if (eticheta) eticheta.textContent = colete ? 'Ce trimiți și cât cântărește' : 'Câte persoane';
+      if (detalii) detalii.placeholder = colete ? 'ex. o cutie, cam 20 kg' : 'ex. 2';
+    };
+    serviciu.addEventListener('change', potriveste);
+    potriveste();
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const valori = new FormData(form);
-      const plecare = String(valori.get('plecare') ?? '').trim();
-      const destinatie = String(valori.get('destinatie') ?? '').trim();
-      const zi = String(valori.get('data') ?? '');
-      const persoane = String(valori.get('persoane') ?? '1');
+      const text = (nume: string) => String(valori.get(nume) ?? '').trim();
+      const plecare = text('plecare');
+      const destinatie = text('destinatie');
+      const zi = text('data');
+      const colete = text('serviciu') === 'colete';
 
       const lipsa = !plecare || !destinatie || !zi;
       eroare?.classList.toggle('hidden', !lipsa);
@@ -100,12 +136,17 @@ import { firma, oraseArges, oraseOlanda, pasi } from '../data';
         month: 'long',
       });
       const mesaj = [
-        'Bună ziua, aș vrea un loc pe ruta Argeș – Olanda.',
-        `Plecare din: ${plecare}`,
-        `Destinație: ${destinatie}`,
+        colete
+          ? `Bună ziua, am un colet de trimis (${text('tara')}).`
+          : `Bună ziua, aș vrea un loc la transport persoane (${text('tara')}).`,
+        `De unde: ${plecare}`,
+        `Până unde: ${destinatie}`,
         `Data: ${dataRo}`,
-        `Persoane: ${persoane}`,
-      ].join('\n');
+        text('detalii') && `${colete ? 'Colet' : 'Persoane'}: ${text('detalii')}`,
+        'Care este prețul și când este următoarea plecare?',
+      ]
+        .filter(Boolean)
+        .join('\n');
 
       window.open(`https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(mesaj)}`, '_blank', 'noopener');
     });
